@@ -1,0 +1,125 @@
+@startuml
+title Sistema de Lava Jato - Nivel 1
+
+abstract class Pessoa {
+  - nome: str
+  - telefone: str
+  + resumo(): str
+}
+
+class Cliente {
+  - cpf: str
+  - veiculos: list[Veiculo]
+  + adicionar_veiculo(veiculo): void
+  + resumo(): str
+}
+
+class Funcionario {
+  - matricula: str
+  - cargo: str
+  + resumo(): str
+  + executar_servico(servico): str
+}
+
+class Veiculo {
+  - placa: str
+  - modelo: str
+  - porte: str
+  + resumo(): str
+}
+
+abstract class Servico {
+  - nome: str
+  - preco_base: float
+  + calcular_preco(): float
+  + descricao(): str
+}
+
+class LavagemSimples {
+  + calcular_preco(): float
+}
+
+class LavagemCompleta {
+  + calcular_preco(): float
+}
+
+class Polimento {
+  + calcular_preco(): float
+}
+
+class ItemServico {
+  - servico: Servico
+  - funcionario: Funcionario
+  + subtotal(): float
+  + resumo(): str
+}
+
+class Pagamento {
+  - forma: str
+  - valor: float
+  - confirmado: bool
+  + confirmar(): void
+}
+
+class OrdemServico {
+  - codigo: int
+  - data: date
+  - status: StatusOrdem
+  - itens: list[ItemServico]
+  - pagamento: Pagamento
+  + adicionar_servico(servico, funcionario): void
+  + total(): float
+  + finalizar(forma_pagamento): void
+  + resumo(): str
+}
+
+class RelatorioFinanceiro {
+  + gerar(ordens): str
+}
+
+class LavaJatoApp {
+  - clientes: list[Cliente]
+  - funcionarios: list[Funcionario]
+  - ordens: list[OrdemServico]
+  + executar(): void
+  + cadastrar_cliente(): Cliente
+  + cadastrar_veiculo(): Veiculo
+  + registrar_lavagem(): OrdemServico
+  + listar_ordens(): void
+  + mostrar_relatorio(): void
+}
+
+enum StatusOrdem {
+  ABERTA
+  FINALIZADA
+}
+
+Pessoa <|-- Cliente
+Pessoa <|-- Funcionario
+Servico <|-- LavagemSimples
+Servico <|-- LavagemCompleta
+Servico <|-- Polimento
+
+Cliente "1" -- "0..*" Veiculo : associacao
+OrdemServico "1" -- "1" Cliente : associacao
+OrdemServico "1" -- "1" Veiculo : associacao
+OrdemServico "1" *-- "1..*" ItemServico : composicao
+OrdemServico "1" *-- "0..1" Pagamento : composicao
+ItemServico "1" -- "1" Servico : associacao
+ItemServico "1" -- "1" Funcionario : associacao
+OrdemServico --> StatusOrdem
+RelatorioFinanceiro ..> OrdemServico : dependencia
+Funcionario ..> Servico : dependencia/polimorfismo
+LavaJatoApp o-- Cliente : gerencia
+LavaJatoApp o-- Funcionario : gerencia
+LavaJatoApp o-- OrdemServico : registra
+LavaJatoApp ..> RelatorioFinanceiro : emite
+
+note right of Servico
+Polimorfismo:
+calcular_preco() muda conforme
+LavagemSimples, LavagemCompleta
+ou Polimento.
+end note
+
+@enduml
