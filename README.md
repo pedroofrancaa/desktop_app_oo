@@ -55,12 +55,3 @@ Tambem existe uma versao PlantUML em:
 ```text
 docs/uml_lava_jato.puml
 ```
-
-## Sugestao de roteiro para o video de ate 3 minutos
-
-1. Mostrar o arquivo `docs/uml_lava_jato.svg`.
-2. Explicar rapidamente as relacoes: heranca, polimorfismo, composicao, associacao e dependencia.
-3. Abrir o `main.py` e mostrar as classes principais.
-4. Rodar `python main.py` no CMD.
-5. Usar as opcoes `1`, `2`, `3`, `4` e `5` para mostrar o fluxo manual.
-6. Mostrar o cadastro do cliente, cadastro do veiculo, registro da lavagem, listagem da ordem e relatorio financeiro.
